@@ -3,7 +3,7 @@ import os
 # Ensure Keras/TensorFlow can read/write config even in restricted environments
 os.environ.setdefault("KERAS_HOME", "/tmp/.keras")
 try:
-    open(os.path.expanduser("~/.keras/keras.json")).close()
+    os.makedirs(os.path.expanduser("~/.keras"), exist_ok=True)
 except PermissionError:
     os.environ["HOME"] = "/tmp"
 
