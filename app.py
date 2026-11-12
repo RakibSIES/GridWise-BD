@@ -102,18 +102,32 @@ except Exception as e:
 # 3. Live Open-Meteo Weather Integration
 # ---------------------------------------------------------
 @st.cache_data(ttl=600)
-def fetch_live_weather(division: str, fallback_temp: float = 31.5):
+def fetch_live_weather(division: str, target_dt=None, fallback_temp: float = 31.5):
     coords = DIVISION_COORDS.get(division, DIVISION_COORDS["Dhaka"])
-    url = "https://api.open-meteo.com/v1/forecast"
-    params = {
-        "latitude": coords["lat"],
-        "longitude": coords["lon"],
-        "current_weather": "true",
-        "hourly": "temperature_2m",
-        "daily": "temperature_2m_max",
-        "timezone": "Asia/Dhaka",
-        "forecast_days": 1,
-    }
+    today_date = datetime.now().date()
+    req_date = pd.Timestamp(target_dt).date() if target_dt is not None else today_date
+    if req_date < today_date:
+        url = "https://archive-api.open-meteo.com/v1/archive"
+        params = {
+            "latitude": coords["lat"],
+            "longitude": coords["lon"],
+            "start_date": req_date.strftime("%Y-%m-%d"),
+            "end_date": req_date.strftime("%Y-%m-%d"),
+            "hourly": "temperature_2m",
+            "daily": "temperature_2m_max",
+            "timezone": "Asia/Dhaka",
+        }
+    else:
+        url = "https://api.open-meteo.com/v1/forecast"
+        params = {
+            "latitude": coords["lat"],
+            "longitude": coords["lon"],
+            "current_weather": "true",
+            "hourly": "temperature_2m",
+            "daily": "temperature_2m_max",
+            "timezone": "Asia/Dhaka",
+            "forecast_days": 1,
+        }
     try:
         resp = requests.get(url, params=params, timeout=5)
         resp.raise_for_status()
@@ -166,7 +180,7 @@ heatwave = st.sidebar.checkbox("Simulate High Temp / Heatwave")
 
 # Fetch live weather for the selected division
 fallback_temp_val = float(grid_df["Maximum Temperature in Dhaka was"].median())
-weather_info = fetch_live_weather(selected_division, fallback_temp=fallback_temp_val)
+weather_info = fetch_live_weather(selected_division, target_dt=target_date, fallback_temp=fallback_temp_val)
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("🌡️ Real-Time Weather Feed")
