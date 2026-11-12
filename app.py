@@ -181,6 +181,7 @@ heatwave = st.sidebar.checkbox("Simulate High Temp / Heatwave")
 # Fetch live weather for the selected division
 fallback_temp_val = float(grid_df["Maximum Temperature in Dhaka was"].median())
 weather_info = fetch_live_weather(selected_division, target_dt=target_date, fallback_temp=fallback_temp_val)
+dhaka_weather = fetch_live_weather("Dhaka", target_dt=target_date, fallback_temp=fallback_temp_val)
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("🌡️ Real-Time Weather Feed")
@@ -321,7 +322,7 @@ pipeline_out = run_hybrid_pipeline(
     division=selected_division,
     target_dt=target_date,
     model_type=model_choice,
-    live_temp=weather_info["temp_c"],
+    live_temp=dhaka_weather["temp_c"],
     gas_flag=gas_shortage,
     temp_flag=heatwave,
 )
