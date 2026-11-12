@@ -1,0 +1,41 @@
+{
+  "window": 14,
+  "divisions": [
+    "Dhaka",
+    "Chattogram",
+    "Rajshahi",
+    "Mymensingh",
+    "Sylhet",
+    "Barishal",
+    "Rangpur",
+    "Cumilla",
+    "Khulna"
+  ],
+  "n_seq": 3,
+  "n_stat": 10,
+  "hidden": 32,
+  "seq_features": [
+    "residual",
+    "xgb_prob",
+    "actual_shed"
+  ],
+  "static_features": [
+    "xgb_prob_today",
+    "onehot_Dhaka",
+    "onehot_Chattogram",
+    "onehot_Rajshahi",
+    "onehot_Mymensingh",
+    "onehot_Sylhet",
+    "onehot_Barishal",
+    "onehot_Rangpur",
+    "onehot_Cumilla",
+    "onehot_Khulna"
+  ],
+  "val_start": "2023-07-04",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "note": "Final prob = clip(xgb_prob + mean over seeds of model output, 0, 1)"
+}

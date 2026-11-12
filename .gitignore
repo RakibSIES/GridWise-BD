@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# Virtual environments & local editor folders
+.venv/
+venv/
+env/
+.agents/
+.claude/
+
+# Explicitly keep dataset and model artifacts
+!*.csv
+!*.pkl
+!*.h5
+!*.pt
+
